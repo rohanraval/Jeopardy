@@ -1,40 +1,5 @@
 $(document).ready(function(){
 
-	/* VIEWING FORM */
-	$('#mid').hide();
-	$('#short_answer').hide();
-	$('#multiple_choice').hide();
-	$('#true_false').hide();
-
-	/* CLICKING QUESTION TYPE FORM */
-	$('.question-type').click( function () {
-		$('#mid').show();
-		if(this.id == "sa") {
-			$('#sa').siblings('a').removeClass('active');
-			$('#sa').addClass('active');
-
-			$('#short_answer').show();
-			$('#multiple_choice').hide();
-			$('#true_false').hide();
-		}
-		if (this.id == "mcq") {
-			$('#mcq').siblings('a').removeClass('active');
-			$('#mcq').addClass('active');
-
-			$('#multiple_choice').show();
-			$('#short_answer').hide();
-			$('#true_false').hide();
-		}
-		if (this.id == "tf") {
-			$('#tf').siblings('a').removeClass('active');
-			$('#tf').addClass('active');
-
-			$('#true_false').show();
-			$('#short_answer').hide();
-			$('#multiple_choice').hide();
-		}
-	});
-
 	/* ONCLICK HANDLER FOR THE CLEAR BUTTONS*/
 	$('#sa_clear').click( function() {
 		sa_clear();
@@ -51,15 +16,28 @@ $(document).ready(function(){
 function sa_validation() {
 	var isQuestion = true;
 	var isAnswer = true;
+
 	if($('#sa-question').val() == "") {
-		alert("Please fill out the question.");
+		//changed from modal to text pop up
+		document.getElementById("sa_valid_q").innerHTML = "Please enter a question";
 		isQuestion = false;
+	} else {
+		document.getElementById("sa_valid_q").innerHTML = "";
+		isQuestion = true;
 	}
+
 	if($('#sa-answer').val() == "") {
-		alert("Please fill out the answer.");
+		document.getElementById("sa_valid_a").innerHTML = "Please enter an answer";
 		isAnswer = false;
+	} else {
+		document.getElementById("sa_valid_a").innerHTML = "";
+		isAnswer = true;
 	}
-	return isQuestion && isAnswer;
+	if(isQuestion && isAnswer)
+		return true;
+	else
+		event.preventDefault();
+	return false;
 }
 function mc_validation() {
 	var isQuestion = true;
@@ -67,31 +45,58 @@ function mc_validation() {
 	var isChecked = true;
 
 	if($('#mc-question').val() == "") {
-		alert("Please fill out the question.");
+		document.getElementById("mc_valid_q").innerHTML = "Please enter a question";
 		isQuestion = false;
+	} else {
+		document.getElementById("mc_valid_q").innerHTML = "";
+		isQuestion = true;
 	}
-	if($(".mc_text").val() == "") {
-		alert("Please fill out all the options.");
+
+	if($("#v1").val() == "" || $("#v2").val() == "" || $("#v3").val() == "" || $("#v4").val() == "") {
+		document.getElementById("mc_valid_t").innerHTML = "Please fill out all the options";
 		isText = false;
+	} else {
+		document.getElementById("mc_valid_t").innerHTML = "";
+		isText = true;
 	}
+
 	if( $("input[name='mc']:checked").length == 0) {
-		alert("Please indicate the correct option.");
+		document.getElementById("mc_valid_c").innerHTML = "Please indicate the correct option.";
 		isChecked = false;
+	} else {
+		document.getElementById("mc_valid_c").innerHTML = "";
+		isChecked = true;
 	}
-	return isQuestion && isText && isChecked;
+	if(isQuestion && isText && isChecked)
+		return true;
+	else
+		event.preventDefault();
+	return false;
 }
 function tf_validation() {
 	var isQuestion = true;
 	var isChecked = true;
+
 	if($('#tf-question').val() == "") {
-		alert("Please fill out the question.");
+		document.getElementById("tf_valid_q").innerHTML = "Please enter a question.";
 		isQuestion = false;
+	} else {
+		document.getElementById("tf_valid_q").innerHTML = "";
+		isQuestion = true;
 	}
+
 	if( $("input[name='tf']:checked").length == 0 ) {
-		alert("Please select either true or false.");
+		document.getElementById("tf_valid_a").innerHTML = "Please select either true or false.";
 		isChecked = false;
+	} else {
+		document.getElementById("tf_valid_a").innerHTML = "";
+		isChecked = true;
 	}
-	return isQuestion && isChecked;
+	if(isQuestion && isChecked)
+		return true;
+	else
+		event.preventDefault();
+	return false;
 }
 
 /* CLEAR BUTTON */

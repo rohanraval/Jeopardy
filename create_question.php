@@ -39,7 +39,7 @@
 		<!-- Heading Div -->
 		<div class="container theme-showcase" id="header-div" role="main" >
 			<div class="jumbotron">
-	          <h3>Display Questions</h3>
+	          <h3>Create Questions</h3>
 			  <p>Welcome! Here you can create your own Jeopardy questions.</p>
 	        </div>
 		</div>
@@ -52,71 +52,80 @@
 				<div class="col-md-4" id="left">
 				<h3>Choose Question Type</h3>
 					<div class="list-group">
-					  <a href="#" id="sa" class="question-type list-group-item list-group-item-action"><h4>Short Answer</h4></a>
-					  <a href="#" id="mcq" class="question-type list-group-item list-group-item-action"><h4>Multiple Choice</h4></a>
-					  <a href="#" id="tf" class="question-type list-group-item list-group-item-action"><h4>True or False</h4></a>
+					  <a href="create_question.php?qtype=sa" id="sa" class= "question-type list-group-item list-group-item-action <?php if($_GET["qtype"] == "sa") echo "active" ?>"><h4>Short Answer</h4></a>
+					  <a href="create_question.php?qtype=mcq" id="mcq" class="question-type list-group-item list-group-item-action <?php if($_GET["qtype"] == "mcq") echo "active" ?>"><h4>Multiple Choice</h4></a>
+					  <a href="create_question.php?qtype=tf" id="tf" class="question-type list-group-item list-group-item-action <?php if($_GET["qtype"] == "tf") echo "active" ?>"><h4>True or False</h4></a>
 					</div>
 				</div>
 
-
+			<?php if(isset($_GET["qtype"])) { ?>
 				<!-- QUESTION FORM DIV -->
 				<div class="col-md-7" id="mid">
 					<h3>Create the Question</h3>
 					<br>
 
+				<?php if($_GET["qtype"] == "sa") { ?>
+
 					<!-- SHORT ANSWER FORM -->
-					<form id="short_answer" action="formHandler.php" method="POST" onsubmit="return sa_validation()">
+					<form id="short_answer" action="display_question.php" method="POST" onsubmit="return sa_validation()">
 					  <div class="form-group">
-					    <label>Question:</label><br>
+					  	<label>Question:</label><br>
 					    <textarea class="form-control" id="sa-question" name="question-name" rows="2"></textarea>
+						<p id="sa_valid_q" align="left" style="color:red"></p>
 					  </div>
 					  <div class="form-group">
-						  <label>Answer:</label><br>
-						  <textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5"></textarea>
+						<label>Answer:</label><br>
+						<textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5"></textarea>
+						<p id="sa_valid_a" align="left" style="color:red"></p>
 					  </div>
 					  <button type="submit" id="sa_submit" class="btn btn-success">Submit</button>
 					  <button type="submit" id="sa_clear" class="btn btn-danger">Clear</button>
 					</form>
 
+				<?php } else if($_GET["qtype"] == "mcq") { ?>
 					<!-- MULTIPLE CHOICE FORM -->
-					<form id="multiple_choice" action="formHandler.php" method="POST" onsubmit="return mc_validation()">
+					<form id="multiple_choice" action="display_question.php" method="POST" onsubmit="return mc_validation()">
 						<div class="form-group">
   					    	<label>Question:</label><br>
   					    	<textarea class="form-control" id="mc-question" name="question-name" rows="2"></textarea>
+							<p id="mc_valid_q" align="left" style="color:red"></p>
   					  	</div>
 					  	<label>Options:</label><br>
 						<fieldset class="form-group">
 					      <div class="form-check">
 					        <label class="form-check-label">
-					          <input type="radio" class="form-check-input" name="mc" value = "1">&nbsp;&nbsp;<input type="text" name="v1" class="mc_text"></input></input>
+					          <input type="radio" class="form-check-input" name="mc" value = "1">&nbsp;&nbsp;<input type="text" name="v1" id= "v1" class="mc_text"></input></input>
 					        </label>
 					      </div>
 						  <div class="form-check">
 					        <label class="form-check-label">
-					          <input type="radio" class="form-check-input" name="mc" value = "2">&nbsp;&nbsp;<input type="text" name="v2" class="mc_text"></input></input>
+					          <input type="radio" class="form-check-input" name="mc" value = "2">&nbsp;&nbsp;<input type="text" name="v2" id= "v2" class="mc_text"></input></input>
 					        </label>
 					      </div>
 						  <div class="form-check">
 					        <label class="form-check-label">
-					          <input type="radio" class="form-check-input" name="mc" value = "3">&nbsp;&nbsp;<input type="text" name="v3" class="mc_text"></input></input>
+					          <input type="radio" class="form-check-input" name="mc" value = "3">&nbsp;&nbsp;<input type="text" name="v3" id= "v3" class="mc_text"></input></input>
 					        </label>
 					      </div>
 						  <div class="form-check">
 					        <label class="form-check-label">
-					          <input type="radio" class="form-check-input" name="mc" value = "4">&nbsp;&nbsp;<input type="text" name="v4" class="mc_text"></input></input>
+					          <input type="radio" class="form-check-input" name="mc" value = "4">&nbsp;&nbsp;<input type="text" name="v4" id= "v4" class="mc_text"></input></input>
 					        </label>
 					      </div>
-
+						  <p id="mc_valid_t" align="left" style="color:red"></p>
+						  <p id="mc_valid_c" align="left" style="color:red"></p>
 					    </fieldset>
 					  	<button type="submit" id="mc_submit" class="btn btn-success" >Submit</button>
 					  	<button type="submit" id="mc_clear" class="btn btn-danger" >Clear</button>
 					</form>
 
+				<?php } else if($_GET["qtype"] == "tf") { ?>
 					<!-- TRUE OR FALSE FORM -->
-					<form id="true_false" action="formHandler.php" method="POST" onsubmit="return tf_validation()">
+					<form id="true_false" action="display_question.php" method="POST" onsubmit="return tf_validation()">
 					  <div class="form-group">
 					    <label>Question:</label><br>
 					    <textarea class="form-control" id="tf-question" name="question-name" rows="2"></textarea>
+						<p id="tf_valid_q" align="left" style="color:red"></p>
 					  </div>
 
 					  <fieldset class="form-group">
@@ -130,13 +139,17 @@
 					          <input type="radio" class="form-check-input" name="tf" id="false" value="False">&nbsp;&nbsp;False</input>
 					        </label>
 					      </div>
+						  <p id="tf_valid_a" align="left" style="color:red"></p>
 					  </fieldset>
 
 					  <button type="submit" id="tf_submit" class="btn btn-success" >Submit</button>
 					  <button type="submit" id="tf_clear" class="btn btn-danger" >Clear</button>
 					</form>
+
+				<?php } ?>
 				</div>
 
+			<?php } ?>
 			</div>
 
 		</div>
