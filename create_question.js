@@ -13,13 +13,14 @@ $(document).ready(function(){
 });
 
 /* VALIDATIONS FOR FORM INPUT */
+
 function sa_validation() {
 	var isQuestion = true;
 	var isAnswer = true;
 
 	if($('#sa-question').val() == "") {
 		//changed from modal to text pop up
-		document.getElementById("sa_valid_q").innerHTML = "Please enter a question";
+		document.getElementById("sa_valid_q").innerHTML = "Please enter a question.";
 		isQuestion = false;
 	} else {
 		document.getElementById("sa_valid_q").innerHTML = "";
@@ -27,12 +28,13 @@ function sa_validation() {
 	}
 
 	if($('#sa-answer').val() == "") {
-		document.getElementById("sa_valid_a").innerHTML = "Please enter an answer";
+		document.getElementById("sa_valid_a").innerHTML = "Please enter an answer.";
 		isAnswer = false;
 	} else {
 		document.getElementById("sa_valid_a").innerHTML = "";
 		isAnswer = true;
 	}
+
 	if(isQuestion && isAnswer)
 		return true;
 	else
@@ -45,7 +47,7 @@ function mc_validation() {
 	var isChecked = true;
 
 	if($('#mc-question').val() == "") {
-		document.getElementById("mc_valid_q").innerHTML = "Please enter a question";
+		document.getElementById("mc_valid_q").innerHTML = "Please enter a question.";
 		isQuestion = false;
 	} else {
 		document.getElementById("mc_valid_q").innerHTML = "";
@@ -53,7 +55,7 @@ function mc_validation() {
 	}
 
 	if($("#v1").val() == "" || $("#v2").val() == "" || $("#v3").val() == "" || $("#v4").val() == "") {
-		document.getElementById("mc_valid_t").innerHTML = "Please fill out all the options";
+		document.getElementById("mc_valid_t").innerHTML = "Please fill out all the options.";
 		isText = false;
 	} else {
 		document.getElementById("mc_valid_t").innerHTML = "";
@@ -67,6 +69,7 @@ function mc_validation() {
 		document.getElementById("mc_valid_c").innerHTML = "";
 		isChecked = true;
 	}
+
 	if(isQuestion && isText && isChecked)
 		return true;
 	else
@@ -92,6 +95,7 @@ function tf_validation() {
 		document.getElementById("tf_valid_a").innerHTML = "";
 		isChecked = true;
 	}
+
 	if(isQuestion && isChecked)
 		return true;
 	else
@@ -99,24 +103,22 @@ function tf_validation() {
 	return false;
 }
 
-/* CLEAR BUTTON */
+/* CLEAR BUTTON FUNCTIONALITY */
+
 function sa_clear() {
 	$('#sa-question').val("");
 	$('#sa-answer').val("");
 	event.preventDefault();
-
 }
 function mc_clear() {
 	$('#mc-question').val("");
 	$("input:radio[name='mc']").prop("checked", false);
 	$(".mc_text").val("");
 	event.preventDefault();
-
 }
 function tf_clear() {
 	$('#tf-question').val("");
 	$("#true").prop("checked", false);
 	$("#false").prop("checked", false);
 	event.preventDefault();
-
 }

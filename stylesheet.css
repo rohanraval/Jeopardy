@@ -22,6 +22,16 @@
 	padding-right: 50px;
 }
 
+#display-mid p{
+	font-size: 130%;
+}
+
+#options li{
+	padding-left: 10%;
+	text-align: left;
+	padding-bottom: 3%;
+}
+
 .footer {
   position: absolute;
   font-family: "Courier New", Courier, monospace;
