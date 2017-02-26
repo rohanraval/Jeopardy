@@ -21,14 +21,17 @@
 </head>
 
 <?php
+//count for the current submission #
 if(!isset($_SESSION["count"]))
 	$_SESSION["count"] = 1;
 
 if(isset($_GET["qtype"])) {
 
 	if(isset($_POST["edit"]) || isset($_POST["confirm"])) {
+
 		global $data;
-		$data = [];
+		$data = []; // $data contains all the relevant POST data for the given qtype received from display_page.php
+
 		if(isset($_POST["question-name"]))
 			$data["question"] = $_POST["question-name"];
 		if(isset($_POST["sa-answer-name"])) {
@@ -42,7 +45,7 @@ if(isset($_GET["qtype"])) {
 		}
 
 		if(isset($_POST["confirm"])) {
-			include("write_to_file.php");
+			include("write_to_file.php"); // if confirm was selected on display_page.php then we want to write data to file
 			unset($data);
 		}
 	}
@@ -65,6 +68,15 @@ if(isset($_GET["qtype"])) {
 		</div>
 	</nav>
 
+	<!-- Alert message (only displays upon successful submission) -->
+	<?php if(isset($_SESSION["message"]) && $_SESSION["message"] == "success") { ?>
+		<div class="alert alert-success" id="success">
+			<strong>Submission successful!</strong> View submission file <a href="submission.txt" target="_blank">here.</a>
+		</div>
+	<?php }
+		unset($_SESSION["message"]);
+	?>
+
 	<!-- Heading Div -->
 	<div class="container theme-showcase" id="header-div" role="main" >
 		<div class="jumbotron">
@@ -72,6 +84,7 @@ if(isset($_GET["qtype"])) {
 			<p>Welcome! Here you can create your own Jeopardy questions.</p>
 		</div>
 	</div>
+
 	<!-- Main Content Div -->
 	<div class="container">
 		<div class="row">
@@ -93,7 +106,6 @@ if(isset($_GET["qtype"])) {
 					<br>
 
 					<?php if($_GET["qtype"] == "sa") { ?>
-
 						<!-- SHORT ANSWER FORM -->
 						<form id="short_answer" action="display_question.php?qtype=sa" method="POST" onsubmit="return sa_validation()">
 							<div class="form-group">
@@ -172,5 +184,4 @@ if(isset($_GET["qtype"])) {
 <footer class="footer">
 	<p> Copyright 2017, Rohan S Raval (rsr3ve) and Vamshi K Garikapati (vkg5xt)</p>
 </footer>
-<?php //session_destroy();  ?>
 </html>

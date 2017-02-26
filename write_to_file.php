@@ -14,6 +14,7 @@
 	fwrite($myfile, $write_text);
 	fclose($myfile);
 	$_SESSION["count"]++;
+	$_SESSION["message"] = "success";
 ?>
 
 <?php

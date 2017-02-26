@@ -1,6 +1,15 @@
 #header-div {
 	width: 100%;
-    padding-top: 60px;
+    padding-top: 70px;
+	margin-bottom: -10px;
+}
+
+#success {
+	position: fixed;
+	width: 100%;
+	margin-top: 50px;
+	line-height: 5px;
+	text-align: center;
 }
 
 .jumbotron {
@@ -33,7 +42,7 @@
 }
 
 .footer {
-  position: absolute;
+  position: fixed;
   font-family: "Courier New", Courier, monospace;
   font-weight: 400;
   bottom: 0;
