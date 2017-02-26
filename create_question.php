@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,24 +21,35 @@
 </head>
 
 <?php
-if(isset($_GET["qtype"])) {
-	if(isset($_POST["question-name"]))
-		$question = $_POST["question-name"];
+if(!isset($_SESSION["count"]))
+	$_SESSION["count"] = 1;
 
-	if(isset($_POST["sa-answer-name"])) {
-		$sa_answer = $_POST["sa-answer-name"];
-	} else if(isset($_POST["mc"])) {
-		for($i = 0; $i < 4; $i++)
-		$option[$i] = $_POST["v" . ($i+1)];
-		$mc_checked = $_POST["mc"];
-	} else if(isset($_POST["tf"])) {
-		$tf_checked = $_POST["tf"];
+if(isset($_GET["qtype"])) {
+
+	if(isset($_POST["edit"]) || isset($_POST["confirm"])) {
+		global $data;
+		$data = [];
+		if(isset($_POST["question-name"]))
+			$data["question"] = $_POST["question-name"];
+		if(isset($_POST["sa-answer-name"])) {
+			$data["sa_answer"] = $_POST["sa-answer-name"];
+		} else if(isset($_POST["mc"])) {
+			for($i = 0; $i < 4; $i++)
+				$data["option" . $i] = $_POST["v" . ($i+1)];
+			$data["mc_checked"] = $_POST["mc"];
+		} else if(isset($_POST["tf"])) {
+			$data["tf_checked"] = $_POST["tf"];
+		}
+
+		if(isset($_POST["confirm"])) {
+			include("write_to_file.php");
+			unset($data);
+		}
 	}
 }
 ?>
 
 <body>
-
 	<!-- navigation bar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -59,7 +72,6 @@ if(isset($_GET["qtype"])) {
 			<p>Welcome! Here you can create your own Jeopardy questions.</p>
 		</div>
 	</div>
-
 	<!-- Main Content Div -->
 	<div class="container">
 		<div class="row">
@@ -86,12 +98,12 @@ if(isset($_GET["qtype"])) {
 						<form id="short_answer" action="display_question.php?qtype=sa" method="POST" onsubmit="return sa_validation()">
 							<div class="form-group">
 								<label>Question:</label><br>
-								<textarea class="form-control" id="sa-question" name="question-name" rows="2"><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="sa-question" name="question-name" rows="2"><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 								<p id="sa_valid_q" align="left" style="color:red"></p>
 							</div>
 							<div class="form-group">
 								<label>Answer:</label><br>
-								<textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5"><?php if(isset($sa_answer)) echo $sa_answer ?></textarea>
+								<textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5"><?php if(isset($data["sa_answer"])) echo $data["sa_answer"] ?></textarea>
 								<p id="sa_valid_a" align="left" style="color:red"></p>
 							</div>
 							<button type="submit" id="sa_submit" class="btn btn-success">Submit</button>
@@ -103,7 +115,7 @@ if(isset($_GET["qtype"])) {
 						<form id="multiple_choice" action="display_question.php?qtype=mcq" method="POST" onsubmit="return mc_validation()">
 							<div class="form-group">
 								<label>Question:</label><br>
-								<textarea class="form-control" id="mc-question" name="question-name" rows="2"><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="mc-question" name="question-name" rows="2"><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 								<p id="mc_valid_q" align="left" style="color:red"></p>
 							</div>
 							<label>Options:</label><br>
@@ -111,7 +123,7 @@ if(isset($_GET["qtype"])) {
 								<?php for($i = 0; $i < 4; $i++) { ?>
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php if(isset($mc_checked) && $mc_checked == ($i+1)) echo "checked"?>> &nbsp;&nbsp; <input type="text" name="v<?php echo ($i+1)?>" id="v<?php echo ($i+1)?>" class="mc_text" value="<?php if(isset($option)) echo $option[$i] ?>"></input></input>
+											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php if(isset($data["mc_checked"]) && $data["mc_checked"] == ($i+1)) echo "checked"?>> &nbsp;&nbsp; <input type="text" name="v<?php echo ($i+1) ?>" id="v<?php echo ($i+1)?>" class="mc_text" value="<?php if(isset($data["option" . $i])) echo $data["option" . $i] ?>"> </input></input>
 										</label>
 									</div>
 									<?php } ?>
@@ -127,20 +139,19 @@ if(isset($_GET["qtype"])) {
 						<form id="true_false" action="display_question.php?qtype=tf" method="POST" onsubmit="return tf_validation()">
 							<div class="form-group">
 								<label>Question:</label><br>
-								<textarea class="form-control" id="tf-question" name="question-name" rows="2"><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="tf-question" name="question-name" rows="2"><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 								<p id="tf_valid_q" align="left" style="color:red"></p>
 							</div>
 							<label>Answer:</label><br>
 							<fieldset class="form-group">
 								<div class="form-check">
 									<label class="form-check-label">
-										<!-- <p><?php if(isset($tf_checked)) echo "checked"?></p> -->
-										<input type="radio" class="form-check-input" name="tf" id="true" value="True" <?php if(isset($tf_checked) && $tf_checked == "True") echo "checked"?>>&nbsp;&nbsp;True</input>
+										<input type="radio" class="form-check-input" name="tf" id="true" value="True" <?php if(isset($data["tf_checked"]) && $data["tf_checked"] == "True") echo "checked"?>>&nbsp;&nbsp;True</input>
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="tf" id="false" value="False" <?php if(isset($tf_checked) && $tf_checked == "False") echo "checked"?>>&nbsp;&nbsp;False</input>
+										<input type="radio" class="form-check-input" name="tf" id="false" value="False" <?php if(isset($data["tf_checked"]) && $data["tf_checked"] == "False") echo "checked"?>>&nbsp;&nbsp;False</input>
 									</label>
 								</div>
 								<p id="tf_valid_a" align="left" style="color:red"></p>
@@ -161,4 +172,5 @@ if(isset($_GET["qtype"])) {
 <footer class="footer">
 	<p> Copyright 2017, Rohan S Raval (rsr3ve) and Vamshi K Garikapati (vkg5xt)</p>
 </footer>
+<?php //session_destroy();  ?>
 </html>

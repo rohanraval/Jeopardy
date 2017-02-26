@@ -20,16 +20,17 @@
 
 <?php
 if(isset($_GET["qtype"])) {
-	$question = $_POST["question-name"];
+	$data = [];
+	$data["question"] = $_POST["question-name"];
 
 	if($_GET["qtype"] == "sa") {
-		$sa_answer = $_POST["sa-answer-name"];
+		$data["sa_answer"] = $_POST["sa-answer-name"];
 	} else if($_GET["qtype"] == "mcq") {
 		for($i = 0; $i < 4; $i++)
-		$option[$i] = $_POST["v" . ($i+1)];
-		$mc_checked = $_POST["mc"];
+			$data["option" . $i] = $_POST["v" . ($i+1)];
+		$data["mc_checked"] = $_POST["mc"];
 	} else {
-		$tf_checked = $_POST["tf"];
+		$data["tf_checked"] = $_POST["tf"];
 	}
 }
 ?>
@@ -65,7 +66,7 @@ if(isset($_GET["qtype"])) {
 			<?php if(isset($_GET["qtype"])) { ?>
 				<div class="col-md-3" style = "height:100%;">
 					<div style = "height:100%; ">
-						<button type="submit" class="btn btn-danger btn-block" style = "height:100%;" form="<?php
+						<button id="edit" name="edit" type="submit" class="btn btn-danger btn-block" style = "height:100%;" form="<?php
 							if($_GET["qtype"] == "sa")
 								echo "short_answer";
 							else if($_GET["qtype"] == "mcq")
@@ -85,11 +86,11 @@ if(isset($_GET["qtype"])) {
 						<form id="short_answer" action="create_question.php?qtype=sa" method="POST">
 							<div class="form-group">
 								<label>Submitted Question:</label><br>
-								<textarea class="form-control" id="sa-question" name="question-name" rows="2" readonly><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="sa-question" name="question-name" rows="2" readonly><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 							</div>
 							<div class="form-group">
 								<label>Submitted Answer:</label><br>
-								<textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5" readonly><?php if(isset($sa_answer)) echo $sa_answer ?></textarea>
+								<textarea class="form-control" id="sa-answer" name="sa-answer-name" rows="5" readonly><?php if(isset($data["sa_answer"])) echo $data["sa_answer"] ?></textarea>
 							</div>
 						</form>
 
@@ -99,14 +100,14 @@ if(isset($_GET["qtype"])) {
 						<form id="multiple_choice" action="create_question.php?qtype=mcq" method="POST">
 							<div class="form-group">
 								<label>Submitted Question:</label><br>
-								<textarea class="form-control" id="mc-question" name="question-name" rows="2" readonly><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="mc-question" name="question-name" rows="2" readonly><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 							</div>
 							<label>Submitted Options:</label><br>
 							<fieldset class="form-group">
 								<?php for($i = 0; $i < 4; $i++) { ?>
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php echo ($mc_checked == ($i+1)) ? "checked" : "disabled" ?>>&nbsp;&nbsp;<input type="text" name="v<?php echo ($i+1)?>" id= "v<?php echo ($i+1)?>" class="mc_text" value="<?php echo $option[$i] ?>" readonly></input></input>
+											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php echo ($data["mc_checked"] == ($i+1)) ? "checked" : "disabled" ?>>&nbsp;&nbsp;<input type="text" name="v<?php echo ($i+1)?>" id="v<?php echo ($i+1)?>" class="mc_text" value="<?php echo $data["option" . $i] ?>" readonly></input></input>
 										</label>
 									</div>
 								<?php } ?>
@@ -119,18 +120,18 @@ if(isset($_GET["qtype"])) {
 						<form id="true_false" action="create_question.php?qtype=tf" method="POST">
 							<div class="form-group">
 								<label>Submitted Question:</label><br>
-								<textarea class="form-control" id="tf-question" name="question-name" rows="2" readonly><?php if(isset($question)) echo $question ?></textarea>
+								<textarea class="form-control" id="tf-question" name="question-name" rows="2" readonly><?php if(isset($data["question"])) echo $data["question"] ?></textarea>
 							</div>
 							<label>Submitted Answer:</label><br>
 							<fieldset class="form-group">
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="tf" id="true" value="True" <?php echo ($tf_checked == "True") ? "checked" : "disabled" ?>>&nbsp;&nbsp;True</input>
+										<input type="radio" class="form-check-input" name="tf" id="true" value="True" <?php echo ($data["tf_checked"] == "True") ? "checked" : "disabled" ?>>&nbsp;&nbsp;True</input>
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="tf" id="false" value="False" <?php echo ($tf_checked == "False") ? "checked" : "disabled" ?>>&nbsp;&nbsp;False</input>
+										<input type="radio" class="form-check-input" name="tf" id="false" value="False" <?php echo ($data["tf_checked"] == "False") ? "checked" : "disabled" ?>>&nbsp;&nbsp;False</input>
 									</label>
 								</div>
 							</fieldset>
@@ -141,7 +142,15 @@ if(isset($_GET["qtype"])) {
 
 				<div class="col-md-3" style = "height:100%;">
 					<div style = "height:100%;">
-						<button type="button" class="btn btn-success btn-block" style = "height:100%;"><h3> Confirm &#8680;</h3></button>
+						<button id="confirm" name="confirm" type="submit" class="btn btn-success btn-block" style = "height:100%;" form="<?php
+							if($_GET["qtype"] == "sa")
+								echo "short_answer";
+							else if($_GET["qtype"] == "mcq")
+								echo "multiple_choice";
+							else echo "true_false";
+							?>">
+							<h3> Confirm &#8680;</h3>
+						</button>
 					</div>
 				</div>
 			<?php } ?>
