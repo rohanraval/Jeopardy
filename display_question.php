@@ -26,8 +26,8 @@ if(isset($_GET["qtype"])) {
 	if($_GET["qtype"] == "sa") {
 		$data["sa_answer"] = $_POST["sa-answer-name"];
 	} else if($_GET["qtype"] == "mcq") {
-		for($i = 0; $i < 4; $i++)
-			$data["option" . $i] = $_POST["v" . ($i+1)];
+		for($i = 1; $i <= 4; $i++)
+			$data["option" . $i] = $_POST["v" . $i];
 		$data["mc_checked"] = $_POST["mc"];
 	} else {
 		$data["tf_checked"] = $_POST["tf"];
@@ -104,10 +104,10 @@ if(isset($_GET["qtype"])) {
 							</div>
 							<label>Submitted Options:</label><br>
 							<fieldset class="form-group">
-								<?php for($i = 0; $i < 4; $i++) { ?>
+								<?php for($i = 1; $i <= 4; $i++) { ?>
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php echo ($data["mc_checked"] == ($i+1)) ? "checked" : "disabled" ?>>&nbsp;&nbsp;<input type="text" name="v<?php echo ($i+1)?>" id="v<?php echo ($i+1)?>" class="mc_text" value="<?php echo $data["option" . $i] ?>" readonly></input></input>
+											<input type="radio" class="form-check-input" name="mc" value="<?php echo $i ?>" <?php echo ($data["mc_checked"] == $i) ? "checked" : "disabled" ?>>&nbsp;&nbsp;<input type="text" name="v<?php echo $i ?>" id="v<?php echo $i ?>" class="mc_text" value="<?php echo $data["option" . $i] ?>" readonly></input></input>
 										</label>
 									</div>
 								<?php } ?>

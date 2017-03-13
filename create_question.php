@@ -37,8 +37,8 @@ if(isset($_GET["qtype"])) {
 		if(isset($_POST["sa-answer-name"])) {
 			$data["sa_answer"] = $_POST["sa-answer-name"];
 		} else if(isset($_POST["mc"])) {
-			for($i = 0; $i < 4; $i++)
-				$data["option" . $i] = $_POST["v" . ($i+1)];
+			for($i = 1; $i <= 4; $i++)
+				$data["option" . $i] = $_POST["v" . $i];
 			$data["mc_checked"] = $_POST["mc"];
 		} else if(isset($_POST["tf"])) {
 			$data["tf_checked"] = $_POST["tf"];
@@ -132,10 +132,10 @@ if(isset($_GET["qtype"])) {
 							</div>
 							<label>Options:</label><br>
 							<fieldset class="form-group">
-								<?php for($i = 0; $i < 4; $i++) { ?>
+								<?php for($i = 1; $i <= 4; $i++) { ?>
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input" name="mc" value="<?php echo ($i+1)?>" <?php if(isset($data["mc_checked"]) && $data["mc_checked"] == ($i+1)) echo "checked"?>> &nbsp;&nbsp; <input type="text" name="v<?php echo ($i+1) ?>" id="v<?php echo ($i+1)?>" class="mc_text" value="<?php if(isset($data["option" . $i])) echo $data["option" . $i] ?>"> </input></input>
+											<input type="radio" class="form-check-input" name="mc" value="<?php echo $i?>" <?php if(isset($data["mc_checked"]) && $data["mc_checked"] == $i) echo "checked"?>> &nbsp;&nbsp; <input type="text" name="v<?php echo $i ?>" id="v<?php echo $i ?>" class="mc_text" value="<?php if(isset($data["option" . $i])) echo $data["option" . $i] ?>"> </input></input>
 										</label>
 									</div>
 									<?php } ?>

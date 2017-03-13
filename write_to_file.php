@@ -29,8 +29,8 @@
 		elseif($_GET["qtype"] == "mcq") {
 			$write .= "\tQuestion Type : Multiple Choice \n";
 			$write .= "\tSubmitted Question : " . $data["question"] . "\n";
-			$write .= "\tSubmitted Options : " . $data["option0"] . ", " . $data["option1"] . ", " . $data["option2"] . ", " . $data["option3"] . "\n";
-			$write .= "\tCorrect Option : " . $data["option" . ($data["mc_checked"]+1)] . "\n";
+			$write .= "\tSubmitted Options : " . $data["option1"] . ", " . $data["option2"] . ", " . $data["option3"] . ", " . $data["option4"] . "\n";
+			$write .= "\tCorrect Option : " . $data["option" . ($data["mc_checked"]) ] . "\n";
 		}
 		elseif($_GET["qtype"] == "tf") {
 			$write .= "\tQuestion Type : True or False \n";
